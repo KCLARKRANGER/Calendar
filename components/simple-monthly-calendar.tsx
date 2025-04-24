@@ -154,26 +154,34 @@ export function SimpleMonthlyCalendar({ tasks, onDateChange, initialDate }: Simp
                       key={dayIndex}
                       className={`min-h-[100px] p-1 border-b border-r relative ${isToday ? "bg-blue-50" : ""} ${
                         isCurrentMonth ? "text-gray-900" : "text-gray-400 bg-gray-50"
-                      } ${isWeekend ? "bg-gray-100" : ""} print:min-h-0`}
+                      } ${isWeekend ? "bg-gray-100" : ""} print:min-h-0 print:h-[1.1in]`}
                     >
                       <div className="text-right p-1 font-bold">{moment(day).format("D")}</div>
 
-                      <div className="mt-1 space-y-1">
-                        {filteredTasks.slice(0, 5).map((task) => {
+                      <div className="mt-1 space-y-1 overflow-hidden">
+                        {filteredTasks.slice(0, 3).map((task) => {
+                          // Show only 3 tasks instead of 5 to allow for larger text
                           const color = getWorkTypeColor(task.typeOfWork)
 
                           return (
-                            <div key={task.taskId} className="flex items-start gap-1 text-xs p-1 rounded">
+                            <div
+                              key={task.taskId}
+                              className="flex items-start gap-1 text-xs p-1 rounded print:py-1 overflow-hidden"
+                            >
                               <div className="flex-shrink-0 mt-0.5" style={{ color }}>
                                 <Circle className="h-2 w-2 fill-current" />
                               </div>
-                              <div className="flex-grow text-[9px] leading-tight line-clamp-2">{task.taskName}</div>
+                              <div className="flex-grow text-[9px] leading-tight line-clamp-1 print:font-medium truncate max-w-full">
+                                {task.taskName}
+                              </div>
                             </div>
                           )
                         })}
 
-                        {filteredTasks.length > 5 && (
-                          <div className="text-xs text-gray-500 pl-1">+{filteredTasks.length - 5} more</div>
+                        {filteredTasks.length > 3 && (
+                          <div className="text-xs text-gray-500 pl-1 print:text-sm print:font-bold">
+                            +{filteredTasks.length - 3} more
+                          </div>
                         )}
                       </div>
                     </div>
@@ -185,8 +193,8 @@ export function SimpleMonthlyCalendar({ tasks, onDateChange, initialDate }: Simp
         </div>
 
         {/* Work Type Legend in bottom corner */}
-        <div className="work-type-legend mt-4 text-xs print:absolute print:bottom-2 print:right-2 print:max-w-[3in]">
-          <div className="flex flex-wrap gap-2 justify-end">
+        <div className="work-type-legend mt-4 text-xs print:absolute print:bottom-2 print:left-2 print:right-2 print:w-[calc(100%-0.4in)]">
+          <div className="flex flex-wrap gap-2 justify-between">
             {workTypes.map((type) => {
               const color = getWorkTypeColor(type)
               return (

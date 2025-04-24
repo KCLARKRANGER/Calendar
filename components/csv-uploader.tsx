@@ -125,17 +125,14 @@ export function CSVUploader({ onFileUpload, isLoading }: CSVUploaderProps) {
                 <strong>Required CSV Format:</strong>
               </p>
               <p>
-                Your CSV file must include at least a <strong>Due Date</strong> column.
-              </p>
-              <p>
-                If a <strong>Start Date</strong> column is not found, the Due Date will be used for both start and end
-                dates.
+                Your CSV file must include columns for <strong>Start Date</strong> and <strong>Due Date</strong>.
               </p>
               <p>
                 Other helpful columns include: Task Name, Task ID, Type of Work, Location, Quantity, and Material Type.
               </p>
               <p>
-                Example header row: <code>Task ID,Task Name,Due Date,Type of work,Location,Quantity,Material Type</code>
+                Example header row:{" "}
+                <code>Task ID,Task Name,Start Date,Due Date,Type of work,Location,Quantity,Material Type</code>
               </p>
             </div>
           </AlertDescription>

@@ -1,7 +1,6 @@
 import Papa from "papaparse"
 import type { TaskData } from "@/types/task"
 
-// Update the parseCSV function to handle missing Start Date column
 export async function parseCSV(file: File): Promise<TaskData[]> {
   return new Promise((resolve, reject) => {
     Papa.parse(file, {
@@ -42,22 +41,15 @@ export async function parseCSV(file: File): Promise<TaskData[]> {
               "work type",
               "Type",
             ],
-            location: [
-              "LOCATION (short text)",
-              "Location",
-              "location",
-              "Place",
-              "place",
-              "📏 Area of Project (short text)",
-            ],
+            location: ["LOCATION (short text)", "Location", "location", "Place", "place"],
             quantity: ["⚖️ QUANTITY (number)", "Quantity", "quantity", "Amount", "amount"],
             materialType: [
               "Material Type (short text)",
+              "Material Type",
               "MaterialType",
               "material_type",
               "material type",
               "Materials",
-              "🛣️ Product (labels)",
             ],
           }
 
@@ -81,18 +73,12 @@ export async function parseCSV(file: File): Promise<TaskData[]> {
 
           console.log("Mapped columns:", actualColumns)
 
-          // Validate required columns - we need at least Due Date
-          if (!actualColumns.dueDate) {
+          // Validate required columns
+          if (!actualColumns.startDate || !actualColumns.dueDate) {
             console.error("Missing required date columns. Found columns:", headers)
             throw new Error(
-              `CSV is missing required date columns. We need at least a Due Date column. Found: ${headers.join(", ")}`,
+              `CSV is missing required date columns. We need columns for start date and due date. Found: ${headers.join(", ")}`,
             )
-          }
-
-          // If Start Date is missing, we'll use Due Date for both
-          const usesDueDateForStart = !actualColumns.startDate
-          if (usesDueDateForStart) {
-            console.log("No Start Date column found. Using Due Date for both start and end dates.")
           }
 
           const parsedData = results.data.map((row: any, index) => {
@@ -101,13 +87,10 @@ export async function parseCSV(file: File): Promise<TaskData[]> {
               console.log(`Row ${index} sample:`, row)
             }
 
-            // If no start date column, use the due date for both
-            const startDate = usesDueDateForStart ? row[actualColumns.dueDate] : row[actualColumns.startDate] || ""
-
             return {
               taskId: row[actualColumns.taskId] || `task-${index}`,
               taskName: row[actualColumns.taskName] || "Unnamed Task",
-              startDate: startDate,
+              startDate: row[actualColumns.startDate] || "",
               dueDate: row[actualColumns.dueDate] || "",
               typeOfWork: row[actualColumns.typeOfWork] || "",
               location: row[actualColumns.location] || "",

@@ -11,10 +11,9 @@ import type { TaskData } from "@/types/task"
 import { parseCSV } from "@/lib/parse-csv"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
-import { InfoIcon, RefreshCw } from "lucide-react"
+import { InfoIcon, RefreshCw, PrinterIcon } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { ExampleDataButton } from "@/components/example-data-button"
-import { PrintCalendarButton } from "@/components/print-calendar-button"
 
 export default function Home() {
   const [tasks, setTasks] = useState<TaskData[]>([])
@@ -144,7 +143,29 @@ export default function Home() {
             <RefreshCw className="h-4 w-4 mr-1" />
             Refresh
           </Button>
-          <PrintCalendarButton date={selectedDate} />
+          <Button
+            onClick={() => {
+              // Set print-specific settings
+              document.body.style.width = "11in"
+              document.body.style.height = "8.5in"
+              document.body.classList.add("printing-calendar")
+
+              setTimeout(() => {
+                window.print()
+
+                // Reset after printing
+                setTimeout(() => {
+                  document.body.classList.remove("printing-calendar")
+                  document.body.style.width = ""
+                  document.body.style.height = ""
+                }, 1000)
+              }, 100)
+            }}
+            className="flex items-center gap-2"
+          >
+            <PrinterIcon className="h-4 w-4 mr-1" />
+            Print Calendar (8.5x11)
+          </Button>
         </div>
       </div>
 

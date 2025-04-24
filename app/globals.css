@@ -359,27 +359,183 @@
 }
 
 @media print {
+  @page {
+    size: landscape;
+    margin: 0.2in; /* Reduced margins */
+  }
+
+  body {
+    font-size: 10pt !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  /* Hide everything except the calendar */
+  body * {
+    visibility: hidden !important;
+  }
+
+  .simple-monthly-calendar,
+  .simple-monthly-calendar * {
+    visibility: visible !important;
+  }
+
+  /* Position the calendar for optimal use of the page */
   .simple-monthly-calendar {
-    width: 100%;
-    height: 100%;
-    page-break-inside: avoid;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    page-break-after: always !important;
+    transform: scale(1) !important;
+    transform-origin: top left !important;
   }
 
+  /* Calendar header styling */
+  .simple-monthly-calendar h2.text-2xl {
+    font-size: 18pt !important;
+    margin-bottom: 0.05in !important;
+    line-height: 1.2 !important;
+  }
+
+  .simple-monthly-calendar h3.text-xl {
+    font-size: 16pt !important;
+    margin-bottom: 0.05in !important;
+    line-height: 1.2 !important;
+  }
+
+  .simple-monthly-calendar p.text-sm {
+    font-size: 10pt !important;
+    margin-bottom: 0.05in !important;
+    line-height: 1.2 !important;
+  }
+
+  /* Optimize calendar grid for 8.5x11 landscape */
+  .simple-monthly-calendar .grid-cols-7 {
+    display: grid !important;
+    grid-template-columns: repeat(7, 1fr) !important;
+    grid-template-rows: auto repeat(6, 1fr) !important; /* Fixed 6 rows for weeks */
+    height: calc(100% - 1.2in) !important; /* Leave room for header and legend */
+  }
+
+  /* Day header cells */
+  .simple-monthly-calendar .grid-cols-7.bg-gray-100 > div {
+    min-height: auto !important;
+    height: 0.25in !important;
+    padding: 0.05in !important;
+    font-size: 12pt !important;
+    font-weight: bold !important;
+  }
+
+  /* Calendar day cells - FIXED EQUAL HEIGHT */
   .simple-monthly-calendar .grid-cols-7 > div {
-    min-height: 80px;
-    padding: 2px;
+    height: 1.1in !important; /* Fixed height for all cells */
+    min-height: 1.1in !important;
+    max-height: 1.1in !important;
+    padding: 0.05in !important;
+    page-break-inside: avoid !important;
+    border: 1px solid #000 !important;
+    overflow: hidden !important;
   }
 
+  /* Make date numbers clearly visible */
   .simple-monthly-calendar .text-right {
-    font-size: 14px;
-    padding: 2px 4px;
+    font-size: 14pt !important;
+    font-weight: bold !important;
+    padding: 0.02in !important;
+    margin-bottom: 0.02in !important;
+    color: black !important;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
   }
 
-  .simple-monthly-calendar .space-y-1 > div {
-    margin: 2px 0;
-    padding: 2px;
-    font-size: 10px;
-    min-height: 18px;
+  /* Task styling for print - INCREASE FONT SIZE */
+  .simple-monthly-calendar .flex.items-start.gap-1 {
+    margin: 0.02in 0 !important;
+    padding: 0.02in !important;
+  }
+
+  .simple-monthly-calendar
+    .text-[9px],
+  .simple-monthly-calendar .flex-grow.text-[9px] {
+    font-size: 9pt !important; /* Significantly larger font size */
+    line-height: 1.2 !important;
+    max-height: none !important;
+    font-weight: 500 !important;
+  }
+
+  /* Make the circle indicators larger */
+  .simple-monthly-calendar .h-2.w-2.fill-current {
+    height: 0.15in !important;
+    width: 0.15in !important;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+
+  /* Work type legend styling for print - SINGLE LINE */
+  .work-type-legend {
+    position: absolute !important;
+    bottom: 0.1in !important;
+    left: 0.1in !important;
+    right: 0.1in !important;
+    padding: 0.05in !important;
+    border-top: 1px solid #ddd !important;
+    font-size: 8pt !important;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+    background-color: white !important;
+  }
+
+  .work-type-legend .flex.flex-wrap {
+    display: flex !important;
+    flex-wrap: nowrap !important; /* Force single line */
+    justify-content: space-between !important;
+    width: 100% !important;
+  }
+
+  .work-type-legend .flex.items-center.gap-1 {
+    margin-right: 0.1in !important;
+    white-space: nowrap !important;
+  }
+
+  .work-type-legend .text-[8px] {
+    font-size: 8pt !important;
+    font-weight: bold !important;
+  }
+
+  /* Ensure text doesn't overflow cells */
+  .simple-monthly-calendar .grid-cols-7 > div {
+    overflow: hidden !important;
+  }
+
+  .simple-monthly-calendar .flex.items-start.gap-1 {
+    max-width: 100% !important;
+    overflow: hidden !important;
+  }
+
+  .simple-monthly-calendar .flex-grow.text-[9px] {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    max-width: calc(100% - 20px) !important;
+  }
+
+  /* Ensure consistent cell heights */
+  .simple-monthly-calendar .grid-cols-7 {
+    grid-template-rows: auto repeat(6, minmax(1.1in, 1fr)) !important;
+  }
+
+  /* Prevent text from breaking out of containers */
+  * {
+    overflow-wrap: break-word !important;
+    word-wrap: break-word !important;
   }
 }
 
@@ -402,10 +558,18 @@
 @media print {
   @page {
     size: landscape;
-    margin: 0.4cm;
+    margin: 0.2in; /* Reduce margins further to maximize space */
   }
 
-  /* Hide everything except the current month calendar */
+  body {
+    font-size: 10pt !important; /* Increase base font size */
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  /* Hide everything except the calendar */
   body * {
     visibility: hidden !important;
   }
@@ -427,75 +591,107 @@
     box-shadow: none !important;
     border: none !important;
     page-break-after: always !important;
+    transform: scale(1) !important; /* Don't scale down, use full page */
+    transform-origin: top left !important;
+  }
+
+  /* Calendar header styling */
+  .simple-monthly-calendar h2.text-2xl {
+    font-size: 18pt !important;
+    margin-bottom: 0.1in !important;
+  }
+
+  .simple-monthly-calendar h3.text-xl {
+    font-size: 16pt !important;
+    margin-bottom: 0.05in !important;
+  }
+
+  .simple-monthly-calendar p.text-sm {
+    font-size: 10pt !important;
+    margin-bottom: 0.05in !important;
   }
 
   /* Optimize calendar grid for 8.5x11 landscape */
   .simple-monthly-calendar .grid-cols-7 {
     display: grid !important;
     grid-template-columns: repeat(7, 1fr) !important;
+    height: calc(100% - 0.8in) !important; /* Leave room for header */
   }
 
   .simple-monthly-calendar .grid-cols-7 > div {
-    min-height: 1.6in !important; /* Maximize height for 8.5x11 landscape */
+    min-height: 1.2in !important; /* Adjusted height for landscape */
+    max-height: 1.2in !important;
     padding: 0.05in !important;
     page-break-inside: avoid !important;
     border: 1px solid #000 !important;
+    overflow: hidden !important;
+  }
+
+  /* Day header cells */
+  .simple-monthly-calendar .grid-cols-7.bg-gray-100 > div {
+    min-height: auto !important;
+    max-height: 0.3in !important;
+    padding: 0.05in !important;
+    font-size: 12pt !important;
+    font-weight: bold !important;
   }
 
   /* Make date numbers clearly visible */
   .simple-monthly-calendar .text-right {
     font-size: 14pt !important;
     font-weight: bold !important;
-    padding: 0.05in !important;
+    padding: 0.02in !important;
+    margin-bottom: 0.02in !important;
     color: black !important;
     print-color-adjust: exact !important;
     -webkit-print-color-adjust: exact !important;
   }
 
-  /* Task styling for print */
-  .simple-monthly-calendar .ink-friendly-task {
+  /* Task styling for print - INCREASE FONT SIZE */
+  .simple-monthly-calendar .flex.items-start.gap-1 {
     margin: 0.02in 0 !important;
     padding: 0.02in !important;
-    font-size: 7pt !important;
-    line-height: 1.1 !important;
-    color: black !important;
+  }
+
+  .simple-monthly-calendar
+    .text-[9px],
+  .simple-monthly-calendar .flex-grow.text-[9px] {
+    font-size: 9pt !important; /* Significantly larger font size */
+    line-height: 1.2 !important;
+    max-height: none !important;
+    font-weight: 500 !important;
+  }
+
+  /* Make the circle indicators larger */
+  .simple-monthly-calendar .h-2.w-2.fill-current {
+    height: 0.15in !important;
+    width: 0.15in !important;
     print-color-adjust: exact !important;
     -webkit-print-color-adjust: exact !important;
   }
 
-  /* Make sure all text is fully visible (not faded) */
-  .simple-monthly-calendar .text-gray-400,
-  .simple-monthly-calendar .text-gray-500,
-  .simple-monthly-calendar .text-gray-600,
-  .simple-monthly-calendar .text-muted-foreground {
-    color: black !important;
-    opacity: 1 !important;
-    print-color-adjust: exact !important;
-    -webkit-print-color-adjust: exact !important;
-  }
-
-  /* Weekend styling for print */
-  .simple-monthly-calendar .bg-gray-100,
-  .simple-monthly-calendar .bg-gray-50 {
-    background-color: white !important;
-    print-color-adjust: exact !important;
-    -webkit-print-color-adjust: exact !important;
-  }
-
-  /* Today styling for print */
-  .simple-monthly-calendar .bg-blue-50 {
-    background-color: white !important;
-    print-color-adjust: exact !important;
-    -webkit-print-color-adjust: exact !important;
-  }
-
-  /* Ensure timestamp is visible */
-  .simple-monthly-calendar .text-sm.text-gray-500 {
-    color: black !important;
+  /* Work type legend styling for print */
+  .work-type-legend {
+    position: absolute !important;
+    bottom: 0.1in !important;
+    right: 0.1in !important;
+    max-width: 3in !important;
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    padding: 0.05in !important;
+    border: 1px solid #ddd !important;
+    border-radius: 4px !important;
     font-size: 8pt !important;
-    margin-bottom: 0.1in !important;
     print-color-adjust: exact !important;
     -webkit-print-color-adjust: exact !important;
+  }
+
+  .work-type-legend .flex.items-center.gap-1 {
+    margin-right: 0.1in !important;
+  }
+
+  .work-type-legend .text-[8px] {
+    font-size: 8pt !important;
+    font-weight: bold !important;
   }
 }
 
@@ -620,11 +816,11 @@
 @media print {
   @page {
     size: landscape;
-    margin: 0.25in; /* Reduce margins to maximize usable space */
+    margin: 0.2in; /* Reduced margins further to maximize space */
   }
 
   body {
-    font-size: 9pt !important; /* Slightly smaller base font size */
+    font-size: 10pt !important; /* Increase base font size */
     margin: 0 !important;
     padding: 0 !important;
     width: 100% !important;
@@ -653,23 +849,23 @@
     box-shadow: none !important;
     border: none !important;
     page-break-after: always !important;
-    transform: scale(0.98) !important; /* Slightly scale down to ensure it fits */
+    transform: scale(1) !important; /* Don't scale down, use full page */
     transform-origin: top left !important;
   }
 
   /* Calendar header styling */
   .simple-monthly-calendar h2.text-2xl {
-    font-size: 16pt !important;
+    font-size: 18pt !important;
     margin-bottom: 0.1in !important;
   }
 
   .simple-monthly-calendar h3.text-xl {
-    font-size: 14pt !important;
+    font-size: 16pt !important;
     margin-bottom: 0.05in !important;
   }
 
   .simple-monthly-calendar p.text-sm {
-    font-size: 8pt !important;
+    font-size: 10pt !important;
     margin-bottom: 0.05in !important;
   }
 
@@ -677,12 +873,12 @@
   .simple-monthly-calendar .grid-cols-7 {
     display: grid !important;
     grid-template-columns: repeat(7, 1fr) !important;
-    height: calc(100% - 1in) !important; /* Leave room for header and legend */
+    height: calc(100% - 0.8in) !important; /* Leave room for header */
   }
 
   .simple-monthly-calendar .grid-cols-7 > div {
-    min-height: 1.3in !important; /* Adjusted height for landscape */
-    max-height: 1.3in !important;
+    min-height: 1.2in !important; /* Adjusted height for landscape */
+    max-height: 1.2in !important;
     padding: 0.05in !important;
     page-break-inside: avoid !important;
     border: 1px solid #000 !important;
@@ -694,11 +890,13 @@
     min-height: auto !important;
     max-height: 0.3in !important;
     padding: 0.05in !important;
+    font-size: 12pt !important;
+    font-weight: bold !important;
   }
 
   /* Make date numbers clearly visible */
   .simple-monthly-calendar .text-right {
-    font-size: 12pt !important;
+    font-size: 14pt !important;
     font-weight: bold !important;
     padding: 0.02in !important;
     margin-bottom: 0.02in !important;
@@ -707,16 +905,27 @@
     -webkit-print-color-adjust: exact !important;
   }
 
-  /* Task styling for print */
+  /* Task styling for print - INCREASE FONT SIZE */
   .simple-monthly-calendar .flex.items-start.gap-1 {
-    margin: 0.01in 0 !important;
-    padding: 0.01in !important;
+    margin: 0.02in 0 !important;
+    padding: 0.02in !important;
   }
 
-  .simple-monthly-calendar .text-[9px] {
-    font-size: 6pt !important;
-    line-height: 1 !important;
-    max-height: 2em !important;
+  .simple-monthly-calendar
+    .text-[9px],
+  .simple-monthly-calendar .flex-grow.text-[9px] {
+    font-size: 9pt !important; /* Significantly larger font size */
+    line-height: 1.2 !important;
+    max-height: none !important;
+    font-weight: 500 !important;
+  }
+
+  /* Make the circle indicators larger */
+  .simple-monthly-calendar .h-2.w-2.fill-current {
+    height: 0.15in !important;
+    width: 0.15in !important;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
   }
 
   /* Work type legend styling for print */
@@ -729,15 +938,17 @@
     padding: 0.05in !important;
     border: 1px solid #ddd !important;
     border-radius: 4px !important;
-    font-size: 6pt !important;
+    font-size: 8pt !important;
     print-color-adjust: exact !important;
     -webkit-print-color-adjust: exact !important;
   }
 
-  .work-type-legend .h-2.w-2 {
-    height: 0.08in !important;
-    width: 0.08in !important;
-    print-color-adjust: exact !important;
-    -webkit-print-color-adjust: exact !important;
+  .work-type-legend .flex.items-center.gap-1 {
+    margin-right: 0.1in !important;
+  }
+
+  .work-type-legend .text-[8px] {
+    font-size: 8pt !important;
+    font-weight: bold !important;
   }
 }
