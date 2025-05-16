@@ -11,9 +11,12 @@ import type { TaskData } from "@/types/task"
 import { parseCSV } from "@/lib/parse-csv"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
-import { InfoIcon, RefreshCw, PrinterIcon } from "lucide-react"
+import { InfoIcon, RefreshCw } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { ExampleDataButton } from "@/components/example-data-button"
+import { PrintCalendarButton } from "@/components/print-calendar-button"
+import { PrintJobDetailsButton } from "@/components/print-job-details-button"
+import { PrintBothButton } from "@/components/print-both-button"
 
 export default function Home() {
   const [tasks, setTasks] = useState<TaskData[]>([])
@@ -81,11 +84,6 @@ export default function Home() {
     }
   }
 
-  const handlePrint = () => {
-    // Print the page - the SimpleMonthlyCalendar component will handle the printing logic
-    window.print()
-  }
-
   // Debounced date change handler to prevent infinite loops
   const handleDateChange = useCallback((date: Date) => {
     const now = Date.now()
@@ -121,7 +119,7 @@ export default function Home() {
 
       <div className="flex justify-between items-center mb-4 print:hidden">
         <h2 className="text-xl font-semibold">Calendar View</h2>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <Button
             variant="outline"
             onClick={() => document.getElementById("csv-upload-section")?.classList.toggle("hidden")}
@@ -143,30 +141,13 @@ export default function Home() {
             <RefreshCw className="h-4 w-4 mr-1" />
             Refresh
           </Button>
-          <Button
-            onClick={() => {
-              // Set print-specific settings
-              document.body.style.width = "11in"
-              document.body.style.height = "8.5in"
-              document.body.classList.add("printing-calendar")
-
-              setTimeout(() => {
-                window.print()
-
-                // Reset after printing
-                setTimeout(() => {
-                  document.body.classList.remove("printing-calendar")
-                  document.body.style.width = ""
-                  document.body.style.height = ""
-                }, 1000)
-              }, 100)
-            }}
-            className="flex items-center gap-2"
-          >
-            <PrinterIcon className="h-4 w-4 mr-1" />
-            Print Calendar (8.5x11)
-          </Button>
         </div>
+      </div>
+
+      <div className="flex justify-end gap-2 mb-4 print:hidden">
+        <PrintCalendarButton date={selectedDate} tasks={tasks} />
+        <PrintJobDetailsButton date={selectedDate} tasks={tasks} />
+        <PrintBothButton date={selectedDate} tasks={tasks} />
       </div>
 
       <div id="csv-upload-section" className="mb-6 print:hidden">

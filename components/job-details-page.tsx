@@ -5,6 +5,7 @@ import moment from "moment"
 import type { TaskData } from "@/types/task"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { parseDate, formatDate } from "@/lib/date-utils"
+import { getWorkTypeColor } from "@/lib/work-type-colors"
 
 interface JobDetailsPageProps {
   tasks: TaskData[]
@@ -66,30 +67,30 @@ export function JobDetailsPage({ tasks, selectedDate }: JobDetailsPageProps) {
         <div className="space-y-6">
           {Object.entries(tasksByWorkType).map(([workType, tasks]) => (
             <Card key={workType} className="overflow-hidden">
-              <CardHeader className="bg-gray-100">
+              <CardHeader className="py-2" style={{ backgroundColor: getWorkTypeColor(workType), color: "white" }}>
                 <CardTitle>{workType}</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-0">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b">
-                      <th className="text-left py-2">Task Name</th>
-                      <th className="text-left py-2">Location</th>
-                      <th className="text-left py-2">Start Date</th>
-                      <th className="text-left py-2">Due Date</th>
-                      <th className="text-left py-2">Material</th>
-                      <th className="text-left py-2">Quantity</th>
+                      <th className="text-left py-2 px-3">Task Name</th>
+                      <th className="text-left py-2 px-3">Location</th>
+                      <th className="text-left py-2 px-3">Start Date</th>
+                      <th className="text-left py-2 px-3">Due Date</th>
+                      <th className="text-left py-2 px-3">Material</th>
+                      <th className="text-left py-2 px-3">Quantity</th>
                     </tr>
                   </thead>
                   <tbody>
                     {tasks.map((task) => (
                       <tr key={task.taskId} className="border-b">
-                        <td className="py-2">{task.taskName}</td>
-                        <td className="py-2">{task.location}</td>
-                        <td className="py-2">{formatDate(task.startDate)}</td>
-                        <td className="py-2">{formatDate(task.dueDate)}</td>
-                        <td className="py-2">{task.materialType}</td>
-                        <td className="py-2">{task.quantity}</td>
+                        <td className="py-2 px-3">{task.taskName}</td>
+                        <td className="py-2 px-3">{task.location}</td>
+                        <td className="py-2 px-3">{formatDate(task.startDate)}</td>
+                        <td className="py-2 px-3">{formatDate(task.dueDate)}</td>
+                        <td className="py-2 px-3">{task.materialType}</td>
+                        <td className="py-2 px-3">{task.quantity}</td>
                       </tr>
                     ))}
                   </tbody>
